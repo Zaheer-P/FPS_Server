@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;
+    public float throwForce = 800f;
     private bool[] inputs;
     private float yVelocity = 0;
     public float health;
@@ -97,13 +98,20 @@ public class Player : MonoBehaviour
 
     public void Shoot(Vector3 _viewDirection)
     {
-        if(Physics.Raycast(shootOrigin.position, _viewDirection, out RaycastHit _hit, 20f))
+        if (health <= 0f)
         {
-            if (_hit.collider.CompareTag("Player"))
-            {
-                _hit.collider.GetComponent<Player>().TakeDamage(50f);
-            }
+            return;
         }
+
+        // if(Physics.Raycast(shootOrigin.position, _viewDirection, out RaycastHit _hit, 20f))
+        // {
+        //     if (_hit.collider.CompareTag("Player"))
+        //     {
+        //         _hit.collider.GetComponent<Player>().TakeDamage(50f);
+        //     }
+        // }
+
+        NetworkManager.instance.InstantiateProjectile(shootOrigin).Initialize(_viewDirection, throwForce, id);
     }
 
     public void TakeDamage(float _damage)
