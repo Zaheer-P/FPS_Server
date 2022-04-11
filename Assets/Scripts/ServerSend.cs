@@ -213,7 +213,7 @@ public class ServerSend
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -223,6 +223,53 @@ public class ServerSend
         {
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
+
+            SendTCPDataToAll(_packet);
+        }
+
+    
+    }
+    public static void SpawnEnemy(Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnEnemy))
+        {
+            SendTCPDataToAll(SpawnEnemy_Date(_enemy, _packet));
+        }
+    }
+
+    //FIXED: enemy's being resent to all clients when new joins
+    public static void SpawnEnemy(int _toClient ,Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.spawnEnemy))
+        {
+            SendTCPData(_toClient, SpawnEnemy_Date(_enemy, _packet));
+        }
+    }
+
+    private static Packet SpawnEnemy_Date(Enemy _enemy, Packet _packet)
+    {
+        _packet.Write(_enemy.id);
+        _packet.Write(_enemy.transform.position);
+        return _packet;
+    }
+
+    public static void EnemyPosition(Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.enemyPosition))
+        {
+            _packet.Write(_enemy.id);
+            _packet.Write(_enemy.transform.position);
+
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void EnemyHealth(Enemy _enemy)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.enemyHealth))
+        {
+            _packet.Write(_enemy.id);
+            _packet.Write(_enemy.health);
 
             SendTCPDataToAll(_packet);
         }

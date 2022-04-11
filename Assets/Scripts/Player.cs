@@ -11,13 +11,13 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;
-    public float throwForce = 800f;
+    public float throwForce = 1000f;
     private bool[] inputs;
     private float yVelocity = 0;
     public float health;
     public float maxHealth = 100f;
     public int itemAmount = 0;
-    public int maxItemAmount = 3;
+    public int maxItemAmount = 5;
 
 
     private void Start()
